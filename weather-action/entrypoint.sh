@@ -10,8 +10,8 @@ RESPONSE=$(curl -s "https://api.openweathermap.org/data/2.5/weather?lat="${LAT}"
 
 echo "$RESPONSE"
 echo "---------------------------------"
-TEMPERATURE=$(echo "$RESPONSE" | jq -r '.main.temp') >> "$GITHUB.OUTPUT"
-CONDITION=$(echo "$RESPONSE" | jq -r '.weather[0].description') >> "$GITHUB.OUTPUT"
+temperature=$(echo "$RESPONSE" | jq -r '.main.temp') >> "$GITHUB.OUTPUT"
+condition=$(echo "$RESPONSE" | jq -r '.weather[0].description') >> "$GITHUB.OUTPUT"
 
-echo "$TEMPERATURE"
-echo "$CONDITION"
+echo "$temperature"
+echo "$condition"
