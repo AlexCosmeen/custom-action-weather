@@ -6,7 +6,7 @@ LAT="$1"
 LON="$2"
 API_KEY="$3"
 
-RESPONSE=$(curl -s "https://api.openweathermap.org/data/2.5/weather?lat="${LAT}"&lon="${LON}"&appid="${API_KEY}"")
+RESPONSE=$(curl -s "https://api.openweathermap.org/data/2.5/weather?lat="${LAT}"&lon="${LON}"&units=metric&appid="${API_KEY}"")
 
 echo "$RESPONSE"
 echo "---------------------------------"
