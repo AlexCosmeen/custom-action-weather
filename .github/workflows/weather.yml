@@ -1,0 +1,18 @@
+name: 'Workflow for weather'
+on:
+    [push, workflow_dispatch]
+jobs:
+    weather-job:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Clone the repo
+              uses: actions-checkout@v4
+            - name: Custom action
+              id: weather
+              uses: ./weather-action/action.yml
+              with:
+                lat: 44.4361414
+                lon: 26.1027202
+                api_key: ${{ secrets.OPENWEATHER_API }}
+            - name: Show outputs
+              run: echo "Temp is ${{ steps.weather.outputs.temperature }}, condition is ${{ steps.weather.outputs.condition }}"
