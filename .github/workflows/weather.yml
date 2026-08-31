@@ -9,7 +9,7 @@ jobs:
               uses: actions/checkout@v7
             - name: Custom action
               id: weather
-              uses: ./.weather-action/action.yml
+              uses: ./weather-action/action.yml
               with:
                 lat: 44.4361414
                 lon: 26.1027202
