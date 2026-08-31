@@ -23,3 +23,27 @@ sed -i "/<!-- WEATHER_START -->/,/<!-- WEATHER_END -->/c\
 <!-- WEATHER_START -->\
 ${WEATHER_TEXT}\
 <!-- WEATHER_END -->" README.md
+
+GITHUB_RESPONSE=$(curl -s \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $GH_TOKEN" \
+  "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/README.md")
+
+README_SHA=$(echo "$GITHUB_RESPONSE" | jq -r '.sha')
+
+NEW_CONTENT=$(base64 -w 0 README.md) #github requires base64 encode
+
+curl -s \
+  -X PUT \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $GH_TOKEN" \
+  "https://api.github.com/repos/${GITHUB_REPOSITORY}/contents/README.md" \
+  -d "$(jq -n \
+    --arg message "chore: update weather" \
+    --arg content "$NEW_CONTENT" \
+    --arg sha "$README_SHA" \
+    '{
+      message: $message,
+      content: $content,
+      sha: $sha
+    }')"
