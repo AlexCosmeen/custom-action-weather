@@ -1,0 +1,27 @@
+# action.yml
+name: 'Custom action with Docker'
+description: 'Weather action '
+inputs:
+  lat:
+    description: 'Lat of the city'
+    required: true
+    default: '44.4361414'
+  lon:
+    description: 'Lon of the city'
+    required: true
+    default: '26.1027202'
+  api_key:
+    description: 'API Key for weather'
+    required: true
+outputs:
+  temperature: # id of output
+    description: 'Temperature value'
+  condition:
+    description: 'Weather condition ex cloudy'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.lat }}
+    - ${{ inputs.lon }}
+    - ${{ inputs.api_key }}
