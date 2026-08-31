@@ -16,3 +16,5 @@ jobs:
                 api_key: ${{ secrets.OPENWEATHER_API }}
             - name: Show outputs
               run: echo "Temp is ${{ steps.weather.outputs.temperature }}, condition is ${{ steps.weather.outputs.condition }}"
+            - name: Check README
+              run: cat README.md

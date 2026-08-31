@@ -15,3 +15,11 @@ CONDITION=$(echo "$RESPONSE" | jq -r '.weather[0].description')
 
 echo "temperature=$TEMPERATURE" >> "$GITHUB_OUTPUT"
 echo "condition=$CONDITION" >> "$GITHUB_OUTPUT"
+
+WEATHER_TEXT="Temperature: ${TEMPERATURE}°C | Condition: ${CONDITION}"
+
+
+sed -i "/<!-- WEATHER_START -->/,/<!-- WEATHER_END -->/c\
+<!-- WEATHER_START -->\
+${WEATHER_TEXT}\
+<!-- WEATHER_END -->" README.md
