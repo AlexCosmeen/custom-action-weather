@@ -12,7 +12,7 @@ jobs:
               uses: actions/checkout@v7
             - name: Custom action
               env:
-                GH_TOKEN = ${{ github.token }}
+                GH_TOKEN: ${{ github.token }}
               id: weather
               uses: ./weather-action
               with:
