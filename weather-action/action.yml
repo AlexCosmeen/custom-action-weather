@@ -13,6 +13,10 @@ inputs:
   api_key:
     description: 'API Key for weather'
     required: true
+  update_readme:
+    description: 'Update README.md file with current weather'
+    required: false
+    default: false
 outputs:
   temperature: # id of output
     description: 'Temperature value'
@@ -25,3 +29,4 @@ runs:
     - ${{ inputs.lat }}
     - ${{ inputs.lon }}
     - ${{ inputs.api_key }}
+    - ${{ inputs.update_readme }}

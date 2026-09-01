@@ -14,17 +14,18 @@ jobs:
             - name: Clone the repo
               uses: actions/checkout@v7
             - name: Custom action
-              env:
-                GH_TOKEN: ${{ github.token }}
+              # env:
+              #   GH_TOKEN: ${{ github.token }}
               id: weather
               uses: ./weather-action
               with:
                 lat: 44.4361414
                 lon: 26.1027202
                 api_key: ${{ secrets.OPENWEATHER_API }}
+                update_readme: false
+                
             - name: Show outputs
               run: echo "Temp is ${{ steps.weather.outputs.temperature }}, condition is ${{ steps.weather.outputs.condition }}"
-
 
             - name: Check README
               run: cat README.md
