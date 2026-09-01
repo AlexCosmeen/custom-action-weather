@@ -24,9 +24,9 @@ if [ "$UPDATE_README" == "true" ]; then
 
 
   sed -i "/<!-- WEATHER_START -->/,/<!-- WEATHER_END -->/c\\
-  <!-- WEATHER_START -->
-  ${WEATHER_TEXT}
-  <!-- WEATHER_END -->" README.md
+<!-- WEATHER_START -->
+${WEATHER_TEXT}
+<!-- WEATHER_END -->" README.md
 
   GITHUB_RESPONSE=$(curl -s \
     -H "Accept: application/vnd.github+json" \
