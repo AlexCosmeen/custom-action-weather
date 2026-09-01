@@ -20,4 +20,4 @@ information using the OpenWeather API.
 | `condition` | Current weather condition |
 
 ## Usage
-<!-- WEATHER_START -->Temperature: 29.37°C - Condition: clear sky<!-- WEATHER_END -->
+<!-- WEATHER_START -->Temperature: 30.21°C - Condition: clear sky<!-- WEATHER_END -->
