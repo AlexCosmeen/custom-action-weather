@@ -17,7 +17,7 @@ CONDITION=$(echo "$RESPONSE" | jq -r '.weather[0].description')
 echo "temperature=$TEMPERATURE" >> "$GITHUB_OUTPUT"
 echo "condition=$CONDITION" >> "$GITHUB_OUTPUT"
 
-if [ "UPDATE_README" == "true" ]; then 
+if [ "$UPDATE_README" == "true" ]; then 
   echo "Updating README.md file with current weather"
   WEATHER_TEXT="Temperature: ${TEMPERATURE}°C | Condition: ${CONDITION}"
 
@@ -51,7 +51,7 @@ if [ "UPDATE_README" == "true" ]; then
         sha: $sha
       }')"
 
-elif [ "UPDATE_README" == "false" ]; then
+elif [ "$UPDATE_README" == "false" ]; then
   echo "Update README.md file is disabled"
 else
   echo "Error: update_readme must be 'true' or 'false'."
