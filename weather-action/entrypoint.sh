@@ -20,7 +20,7 @@ echo "condition=$CONDITION" >> "$GITHUB_OUTPUT"
 if [ "$UPDATE_README" == "true" ]; then 
   echo "Updating README.md file with current weather"
 
-  WEATHER_TEXT="Temperature: ${TEMPERATURE}°C | Condition: ${CONDITION}"
+  WEATHER_TEXT="Temperature: ${TEMPERATURE}°C - Condition: ${CONDITION}"
 
 
   sed -i "s|<!-- WEATHER_START -->.*<!-- WEATHER_END -->|<!-- WEATHER_START -->${WEATHER_TEXT}<!-- WEATHER_END -->|" README.md
