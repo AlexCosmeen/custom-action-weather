@@ -1,17 +1,17 @@
 # action.yml
-name: 'Custom action with Docker'
-description: 'Weather action '
+name: 'Weather GitHub Action'
+description: 'Retrieve current weather data using OpenWeather'
 inputs:
   lat:
-    description: 'Lat of the city'
+    description: 'Latitude'
     required: true
     default: '44.4361414'
   lon:
-    description: 'Lon of the city'
+    description: 'Longitude'
     required: true
     default: '26.1027202'
   api_key:
-    description: 'API Key for weather'
+    description: 'OpenWeather API Key'
     required: true
   update_readme:
     description: 'Update README.md file with current weather'
@@ -19,7 +19,7 @@ inputs:
     default: false
 outputs:
   temperature: # id of output
-    description: 'Temperature value'
+    description: 'Current temperature'
   condition:
     description: 'Weather condition ex cloudy'
 runs:
