@@ -23,10 +23,7 @@ if [ "$UPDATE_README" == "true" ]; then
   WEATHER_TEXT="Temperature: ${TEMPERATURE}°C | Condition: ${CONDITION}"
 
 
-  sed -i "/<!-- WEATHER_START -->/,/<!-- WEATHER_END -->/c\\
-<!-- WEATHER_START -->
-${WEATHER_TEXT}
-<!-- WEATHER_END -->" README.md
+  sed -i "s|<!-- WEATHER_START -->.*<!-- WEATHER_END -->|<!-- WEATHER_START -->${WEATHER_TEXT}<!-- WEATHER_END -->|" README.md
 
   GITHUB_RESPONSE=$(curl -s \
     -H "Accept: application/vnd.github+json" \
