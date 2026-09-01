@@ -1,23 +1,228 @@
-
 # Weather GitHub Action
 
-A Docker-based GitHub Action that retrieves current weather
-information using the OpenWeather API.
+A Docker-based GitHub Action that retrieves current weather data using the OpenWeather API.
+
+The action can be used to:
+
+* Retrieve the current temperature for a specific location.
+* Retrieve the current weather condition.
+* Expose weather information as GitHub Actions outputs.
+* Optionally update a weather section inside your repository's `README.md`.
+* Automatically refresh weather information using a scheduled workflow.
 
 ## Inputs
 
-| Input | Required | Description |
-|---|---|---|
-| `lat` | Yes | Latitude |
-| `lon` | Yes | Longitude |
-| `api_key` | Yes | OpenWeather API key |
+| Input           | Required | Default      | Description                                                              |
+| --------------- | -------- | ------------ | ------------------------------------------------------------------------ |
+| `lat`           | Yes      | `44.4361414` | Latitude of the location                                                 |
+| `lon`           | Yes      | `26.1027202` | Longitude of the location                                                |
+| `api_key`       | Yes      | —            | OpenWeather API key                                                      |
+| `update_readme` | No       | `false`      | Set to `true` to automatically update weather information in `README.md` |
 
 ## Outputs
 
-| Output | Description |
-|---|---|
-| `temperature` | Current temperature in Celsius |
-| `condition` | Current weather condition |
+| Output        | Description                                                           |
+| ------------- | --------------------------------------------------------------------- |
+| `temperature` | Current temperature in Celsius                                        |
+| `condition`   | Current weather condition, for example `clear sky` or `broken clouds` |
 
-## Usage
-<!-- WEATHER_START -->Temperature: 30.21°C - Condition: clear sky<!-- WEATHER_END -->
+## OpenWeather API Key
+
+This action requires an OpenWeather API key.
+
+Create an API key using the OpenWeather service and store it as a GitHub Actions secret in your repository.
+
+For example, create the following repository secret:
+
+```text
+OPENWEATHER_API
+```
+
+Never store your API key directly inside the workflow file.
+
+## Basic Usage
+
+By default, the action only retrieves weather information and exposes it as outputs.
+
+```yaml
+name: Weather
+
+on:
+  workflow_dispatch:
+
+jobs:
+  weather:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get weather
+        id: weather
+        uses: AlexCosmeen/custom-action-weather@v1
+        with:
+          lat: '44.4361414'
+          lon: '26.1027202'
+          api_key: ${{ secrets.OPENWEATHER_API }}
+
+      - name: Show weather
+        run: |
+          echo "Temperature: ${{ steps.weather.outputs.temperature }}°C"
+          echo "Condition: ${{ steps.weather.outputs.condition }}"
+```
+
+Since `update_readme` defaults to `false`, this configuration does not modify the repository.
+
+## Update README
+
+The action can optionally update a weather section inside your repository's `README.md`.
+
+First, add the following markers to your README:
+
+```html
+<!-- WEATHER_START -->Weather data will be updated automatically.<!-- WEATHER_END -->
+```
+
+Then enable README updates in your workflow:
+
+```yaml
+name: Update Weather
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  weather:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get weather and update README
+        id: weather
+        uses: AlexCosmeen/custom-action-weather@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          lat: '44.4361414'
+          lon: '26.1027202'
+          api_key: ${{ secrets.OPENWEATHER_API }}
+          update_readme: 'true'
+
+      - name: Show weather
+        run: |
+          echo "Temperature: ${{ steps.weather.outputs.temperature }}°C"
+          echo "Condition: ${{ steps.weather.outputs.condition }}"
+```
+
+When `update_readme` is enabled, the action replaces the content between the weather markers with the latest weather information.
+
+For example:
+
+```text
+Temperature: 30.19°C - Condition: clear sky
+```
+
+### Required permissions
+
+README updates require:
+
+```yaml
+permissions:
+  contents: write
+```
+
+The GitHub token must also be provided to the action:
+
+```yaml
+env:
+  GH_TOKEN: ${{ github.token }}
+```
+
+These are only required when:
+
+```yaml
+update_readme: 'true'
+```
+
+## Scheduled Weather Updates
+
+You can use GitHub Actions scheduling to automatically refresh the weather information.
+
+For example:
+
+```yaml
+name: Daily Weather Update
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  weather:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update weather
+        id: weather
+        uses: AlexCosmeen/custom-action-weather@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          lat: '44.4361414'
+          lon: '26.1027202'
+          api_key: ${{ secrets.OPENWEATHER_API }}
+          update_readme: 'true'
+```
+
+The example above runs automatically every day at `05:00 UTC` and can also be started manually using `workflow_dispatch`.
+
+## Example
+
+Current weather generated by this action:
+
+<!-- WEATHER_START -->Temperature: 30.19°C - Condition: clear sky<!-- WEATHER_END -->
+
+## How It Works
+
+The action runs inside a Docker container and:
+
+1. Receives latitude, longitude and the OpenWeather API key as inputs.
+2. Sends a request to the OpenWeather API.
+3. Parses the JSON response using `jq`.
+4. Extracts the current temperature and weather condition.
+5. Exposes the values through GitHub Actions outputs.
+6. If `update_readme` is enabled, modifies the local `README.md`.
+7. Uses the GitHub REST API to update the README in the repository.
+
+## Requirements
+
+* GitHub Actions
+* OpenWeather API key
+* `contents: write` permission when README updates are enabled
+* A checked-out repository when README updates are enabled
+
+## Security
+
+The OpenWeather API key should always be stored using GitHub Actions secrets:
+
+```yaml
+api_key: ${{ secrets.OPENWEATHER_API }}
+```
+
+Do not commit API keys or other credentials to your repository.
+
+The automatically generated GitHub token is only required when `update_readme` is enabled.
+
+## License
+
+This project is licensed under the MIT License.
