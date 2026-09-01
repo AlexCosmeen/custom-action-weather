@@ -14,8 +14,8 @@ jobs:
             - name: Clone the repo
               uses: actions/checkout@v7
             - name: Custom action
-              # env:
-              #   GH_TOKEN: ${{ github.token }}
+              env:
+                GH_TOKEN: ${{ github.token }}
               id: weather
               uses: ./weather-action
               with:
