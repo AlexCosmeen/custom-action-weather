@@ -22,6 +22,9 @@ outputs:
     description: 'Current temperature'
   condition:
     description: 'Weather condition ex cloudy'
+branding:
+  icon: 'cloud'
+  color: 'blue'
 runs:
   using: 'docker'
   image: 'Dockerfile'
