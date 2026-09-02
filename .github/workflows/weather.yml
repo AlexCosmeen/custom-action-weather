@@ -17,7 +17,7 @@ jobs:
               env:
                 GH_TOKEN: ${{ github.token }}
               id: weather
-              uses: ./weather-action
+              uses: ./
               with:
                 lat: 44.4361414
                 lon: 26.1027202
